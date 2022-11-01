@@ -11,6 +11,8 @@ import {
 import colorsAtom from '../../recoil/colorsState';
 import Image from 'next/image';
 import { generateImage } from "../../services/index"
+import resultSatate from '../../recoil/resultSate';
+
 
 
 const QrForm = (): JSX.Element => {
@@ -21,7 +23,8 @@ const QrForm = (): JSX.Element => {
     const [backgroundMode, setBackgroundMode] = useState<boolean>(false);
     const [colorsRecoil, setColorsRecoil] = useRecoilState(colorsAtom);
     const [text, setText] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false);
+    const [resultModal, setResultModal] = useRecoilState(resultSatate);
 
 
     const updateColor = (color: string) => {
@@ -36,14 +39,17 @@ const QrForm = (): JSX.Element => {
 
     const createImage = () => {
         setLoading(true)
-        generateImage(colorsRecoil.color,colorsRecoil.background, text )
-            .then(result => {
+        generateImage(colorsRecoil.color, colorsRecoil.background, text)
+            .then((result: any) => {
+                console.log(result)
                 setTimeout(() => {
                     setLoading(false)
+                    setResultModal({ open: true, id: result.id })
                 }, 1000);
 
+
             })
-            .catch(err => {
+            .catch((err: any) => {
                 console.log(err)
                 setLoading(false)
             })
