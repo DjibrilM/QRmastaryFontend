@@ -16,6 +16,7 @@ body {
   appearance: none;
   width: 10px;
   background-color: transparent;
+  color: #ffffff00;
 }
 *::-webkit-scrollbar-thumb{
 appearance: none;

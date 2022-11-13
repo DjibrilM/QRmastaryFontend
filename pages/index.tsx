@@ -5,6 +5,8 @@ import Head from 'next/head'
 import QrForm from "../components/QRform.tsx"
 import HomeContents from "../components/HomeContents/HomeContents"
 import ResultModal from "../components/resultModal"
+import HomeWrapper from "../components/HOC/HomeWrapper"
+
 
 
 
@@ -34,9 +36,12 @@ const Home = (): JSX.Element => {
     </Head>
 
     <Header />
-    <QrForm />
-    <HomeContents />
     <ResultModal />
+    <HomeWrapper>
+      <QrForm />
+      <HomeContents />
+    </HomeWrapper>
+
   </div>
 }
 

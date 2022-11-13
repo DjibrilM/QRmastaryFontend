@@ -25,7 +25,7 @@ const QrForm = (): JSX.Element => {
     const [text, setText] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [resultModal, setResultModal] = useRecoilState(resultSatate);
-
+    const [error, setError] = useState<boolean>(false)
 
     const updateColor = (color: string) => {
         setColorTransition(() => {
@@ -41,25 +41,35 @@ const QrForm = (): JSX.Element => {
         setLoading(true)
         generateImage(colorsRecoil.color, colorsRecoil.background, text)
             .then((result: any) => {
+                setError(false)
                 console.log(result)
                 setTimeout(() => {
                     setLoading(false)
                     setResultModal({ open: true, id: result.id })
                 }, 1000);
-
-
             })
             .catch((err: any) => {
                 console.log(err)
+                setError(true)
                 setLoading(false)
             })
     }
 
     return (
-        <div className="w-[500px]  h-[880px] bg-white shadow-lg border rounded-lg top-10 right-[100px] p-4 absolute">
+        <div className="md:w-[500px] m-4 h-[880px] bg-white shadow-lg border rounded-lg bottom-10 md:relative   p-4 ">
             <h1 className='text-center text-2xl text-Logo font-medium text-gray-600 my-5'>Create Your QRcode 🙂</h1>
             <div className='my-7'>
-                <TextField id="outlined-basic" label="QRcode text" variant="outlined" className="w-full" onChange={(event: any) => setText(event.target.value)} defaultValue={text} />
+                <TextField id="outlined-basic"
+                    label="QRcode text"
+                    variant="outlined"
+                    className="w-full"
+                    onChange={(event: any) => {
+                        setColorTransition(() => {
+                            setText(event.target.value)
+                            error && setError(false)
+                        })
+
+                    }} defaultValue={text} />
             </div>
 
             <div className="w-full flex justify-between gap-4	">
@@ -94,8 +104,12 @@ const QrForm = (): JSX.Element => {
             </div>
 
             <div className="w-full flex flex-col items-center justify-center my-3 gap-2">
-                <h2 className='font-Logo text-red-400 text-Logo font-semibold'>Fails to generate your QRcode😞 </h2>
-                <p>Please try again</p>
+
+                {error && <>
+                    <h2 className='font-Logo text-red-400 text-Logo font-semibold'>Fails to generate your QRcode😞 </h2>
+                    <p>Please try again</p>
+                </>}
+
             </div>
 
             <Button variant="text" className='w-full bg-primary text-white hover:bg-primary normal-case p-3 text-[18px] font-Logo my-3 relative  disabled:cursor-not-allowed disabled:bg-gray-200 ' onClick={() => createImage()} disabled={text.trim() === '' || text.length < 1 || loading && true}>
@@ -103,7 +117,7 @@ const QrForm = (): JSX.Element => {
                 Create QRcode
                 {loading === true ? <Image alt='loading spinner' src={SpinnerImage} className="w-[20px] h-[20px] absolute left-5" /> : ''}
             </Button>
-        </div>
+        </div >
     )
 }
 
