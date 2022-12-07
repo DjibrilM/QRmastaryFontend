@@ -2,6 +2,8 @@ import React from "react";
 import Image from "next/image";
 import Logo from "../../assets/images/logo.png"
 
+
+
 const Header = (): JSX.Element => {
     return (<header className="w-[95%] m-auto h-20   border-y">
         <div className="w-[90%] m-auto flex  items-center h-full">
